@@ -6,6 +6,7 @@ import CreateDeck from '../deck/CreateDeck'
 import DeckDetail from '../deck/DeckDetail'
 import { white, lightBlue } from '../../utils/Colors'
 import { Platform } from 'react-native'
+import CreateCard from '../card/CreateCard'
 
 const Tabs = TabNavigator({
   Home: {
@@ -48,6 +49,16 @@ const Tabs = TabNavigator({
 export const MainNavigator = StackNavigator({
   Home: {
     screen: Tabs
+  },
+  CreateCard : {
+    screen: CreateCard,
+    navigationOptions: {
+      title: 'New Card',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: lightBlue
+      }
+    }
   },
   DeckDetail: {
     screen: DeckDetail,

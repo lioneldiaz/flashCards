@@ -1,15 +1,26 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
 import { white, lightBlue } from '../../utils/Colors'
 
-export default class DeckDetail extends Component {
-  
+class DeckDetail extends Component {
+  static navigationOptions = ({navigation}) => {
+    const { deckId } = navigation.state.params
+    return {
+      title: deckId
+    }
+  }
   render () {
+    const { deck, navigation } = this.props
+    const { deckId } = navigation.state.params
     return (
       <View style={styles.container}>
         <View style={{margin: 10}}>
-          <Text>Deck Detail</Text>
-          <TouchableOpacity style={styles.btn}>
+          <Text>{deck.title}</Text>
+          <TouchableOpacity style={styles.btn} onPress={()=> navigation.navigate(
+            'CreateCard',
+            {deckId: deckId}
+          )}>
             <Text style={styles.textBtn}>Add Card</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btn}>
@@ -20,6 +31,9 @@ export default class DeckDetail extends Component {
     )
   }
  }
+ /** 
+  * @description Style
+ */
  const styles = StyleSheet.create({
    container: {
      flex: 1,
@@ -39,3 +53,16 @@ export default class DeckDetail extends Component {
      color: lightBlue
    }
  })
+/**
+ * @description Specify which data from the store you passed to your component
+ * @param {Object} state 
+ * @param {Object} navigation 
+ */
+ function mapStateToProps (state, {navigation}) {
+   const { deckId } = navigation.state.params
+
+   return {
+     deck: state[deckId]
+   }
+ }
+ export default connect(mapStateToProps)(DeckDetail)

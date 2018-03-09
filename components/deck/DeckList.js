@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, FlatList, Text, TouchableOpacity, Platform } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native'
 import { white, lightBlue } from '../../utils/Colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { getAllDeck, removeDeck } from '../../utils/Api'
@@ -25,17 +25,9 @@ class DeckList extends Component {
     getAllDeck()
       .then((decks) => dispatch(receiveDecks(decks)))
       .then(() => this.setState(() => ({ ready: true })))
-  }
-  renderItem = () => {
-
-  }
-  get =() => {
-    //removeDeck()
-    let a = getAllDeck()
-  }
+  } 
   render () {
-    const { navigation } = this.props
-    const { decks } = this.props
+    const { decks, navigation } = this.props
     const { ready } = this.state    
     if (!ready) {
       return (
@@ -46,7 +38,10 @@ class DeckList extends Component {
       <View style={styles.container}>
         {Object.keys(decks).map((key, index)=> {
           return (
-            <TouchableOpacity  key={index} onPress={() => navigation.navigate('DeckDetail')}>
+            <TouchableOpacity  key={index} onPress={() => navigation.navigate(
+              'DeckDetail',
+              {deckId: key}
+            )}>
               <View style={styles.card}>
                 <Text style={{color: white}}>{decks[key].title}</Text>
                 <Text style={{color: white}}>0 Card </Text>
@@ -91,6 +86,7 @@ const styles = StyleSheet.create({
  * @return {Object}
  */
 function mapStateToProps (decks) {
+  console.log("Decks ", decks)
   return {
     decks
   }
