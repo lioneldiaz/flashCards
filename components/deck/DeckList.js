@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native'
+import { View, StyleSheet, Text, TouchableOpacity, Platform, FlatList } from 'react-native'
 import { white, lightBlue } from '../../utils/Colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { getAllDeck, removeDeck } from '../../utils/Api'
+import { getDecks } from '../../utils/Api'
 import { connect } from 'react-redux'
-import { receiveDecks } from '../../actions'
+import { receiveDecks } from '../../actions/deckAction'
 import { AppLoading } from 'expo'
 
 class DeckList extends Component {
@@ -22,44 +22,52 @@ class DeckList extends Component {
    */
   componentDidMount () {
     const { dispatch } = this.props
-    getAllDeck()
+    getDecks()
       .then((decks) => dispatch(receiveDecks(decks)))
       .then(() => this.setState(() => ({ ready: true })))
-  } 
+  }
+  renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity key={item.id} onPress={() => this.props.navigation.navigate(
+        'DeckDetail',
+        {deckId: item.id, title: item.title}
+      )}>
+        <View style={styles.card}>
+          <Text style={[styles.textCard, {marginLeft: 40}]}>{item.title}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <MaterialCommunityIcons style={{color: white}} name="cards" size={30}/>
+            <Text style={styles.textCard}>{item.cardCount} Card</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
   render () {
     const { decks, navigation } = this.props
-    const { ready } = this.state    
+    const { ready } = this.state
     if (!ready) {
       return (
         <AppLoading />
       )
     }    
     return (
-      <View style={styles.container}>
-        {Object.keys(decks).map((key, index)=> {
-          return (
-            <TouchableOpacity  key={index} onPress={() => navigation.navigate(
-              'DeckDetail',
-              {deckId: key}
-            )}>
-              <View style={styles.card}>
-                <Text style={{color: white}}>{decks[key].title}</Text>
-                <Text style={{color: white}}>0 Card </Text>
-              </View>
-            </TouchableOpacity>
-          )
-        })}
+      <View style={{flex: 1}}>
+        <FlatList
+          data={decks}
+          renderItem={this.renderItem}
+        />
       </View>
     )
   }
 }
-
 /**
  * @description Styles
  */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  textCard: {
+    color: white, 
+    fontSize: 20, 
+    marginLeft: 10
   },
   /**
    * @description This code was taken from the UdaciFitness Project
@@ -85,10 +93,9 @@ const styles = StyleSheet.create({
  * @param {Object} decks
  * @return {Object}
  */
-function mapStateToProps (decks) {
-  console.log("Decks ", decks)
+function mapStateToProps ({decks}) {
   return {
-    decks
+    decks: Object.keys(decks).map(key => decks[key])
   }
 }
 export default connect(mapStateToProps)(DeckList)

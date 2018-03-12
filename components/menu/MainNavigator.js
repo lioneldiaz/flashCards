@@ -3,6 +3,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import { StackNavigator, TabNavigator } from 'react-navigation'
 import DeckList from '../deck/DeckList'
 import CreateDeck from '../deck/CreateDeck'
+import StartQuiz from '../deck/StartQuiz'
 import DeckDetail from '../deck/DeckDetail'
 import { white, lightBlue } from '../../utils/Colors'
 import { Platform } from 'react-native'
@@ -69,4 +70,14 @@ export const MainNavigator = StackNavigator({
       }
     }
   },
+  StartQuiz: {
+    screen: StartQuiz,
+    navigationOptions: {
+      title: 'Quiz',
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: lightBlue
+      }
+    }
+  }
 })

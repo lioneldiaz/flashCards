@@ -1,5 +1,6 @@
 export const ADD_DECK = 'ADD_DECK'
 export const RECEIVE_DECKS = 'RECEIVE_DECKS'
+export const UPDATE_CARD_NUMBER = 'UPDATE_CARD_NUMBER'
 
 export function receiveDecks (decks) {
   return {
@@ -12,5 +13,12 @@ export function addDeck (deck) {
   return {
     type: ADD_DECK,
     deck
+  }
+}
+
+export function updateCardNumber (deckId) {
+  return {
+    type: UPDATE_CARD_NUMBER,
+    deckId
   }
 }

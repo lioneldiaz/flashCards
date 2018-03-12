@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
-import { white, lightBlue } from '../../utils/Colors'
+import { white, lightBlue, gray } from '../../utils/Colors'
+import TextButton from '../button/TextButton'
 
 class DeckDetail extends Component {
   static navigationOptions = ({navigation}) => {
-    const { deckId } = navigation.state.params
+    const { title } = navigation.state.params
     return {
-      title: deckId
+      title: title
     }
   }
   render () {
@@ -16,41 +18,57 @@ class DeckDetail extends Component {
     return (
       <View style={styles.container}>
         <View style={{margin: 10}}>
-          <Text>{deck.title}</Text>
-          <TouchableOpacity style={styles.btn} onPress={()=> navigation.navigate(
+          <Text style={[styles.textContent, {fontSize: 35}]}>{deck.title}</Text>
+          <Text style={[styles.textContent, styles.textCard]}>{deck.cardCount} cards</Text>
+          <TextButton 
+            style={[styles.btn, styles.textBtn, {backgroundColor: white}]} 
+            onPress={()=>navigation.navigate(
             'CreateCard',
             {deckId: deckId}
-          )}>
-            <Text style={styles.textBtn}>Add Card</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
-            <Text style={styles.textBtn}>Start Quiz</Text>
-          </TouchableOpacity>
+            )}>
+            <MaterialCommunityIcons name="cards" size={30}/>
+            Add Card
+          </TextButton>
+          <TextButton
+            disabled={deck.cardCount === 0 ? true : false}
+            style={[styles.btn, styles.textBtn, {backgroundColor: lightBlue, color: white}]}
+            onPress={()=>navigation.navigate(
+              'StartQuiz',
+              {deckId: deckId})}>
+            Start Quiz
+          </TextButton>
         </View>
       </View>
     )
   }
  }
  /** 
-  * @description Style
+  * @description Styles
  */
  const styles = StyleSheet.create({
    container: {
      flex: 1,
      justifyContent: 'center'
    },
+   textContent: {
+     textAlign: 'center',
+     marginBottom: 15,
+   },
+   textCard: {
+    fontSize: 25, 
+    color: gray
+   },
    btn: {
+    flexDirection: 'row',
     borderRadius: 2,
     marginTop: 20,
-    borderColor: lightBlue,
-    backgroundColor: white,
-    alignItems: 'stretch',
+    alignItems: 'center',
    },
    textBtn: {
      padding: 25,
      textAlign: 'center',
+     color: lightBlue,
      fontSize: 25,
-     color: lightBlue
    }
  })
 /**
@@ -59,10 +77,9 @@ class DeckDetail extends Component {
  * @param {Object} navigation 
  */
  function mapStateToProps (state, {navigation}) {
-   const { deckId } = navigation.state.params
-
-   return {
-     deck: state[deckId]
-   }
+  const { deckId } = navigation.state.params
+  return {
+    deck: state.decks[deckId]
+  }
  }
  export default connect(mapStateToProps)(DeckDetail)
