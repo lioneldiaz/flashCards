@@ -1,5 +1,13 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0"
+    "sdkVersion": "25.0.0",
+    "orientation": "portrait",
+    "name": "FlashCards",
+    "description": "The best app for study ever",
+    "slug": "flashcards",
+    "version": "1.0",
+    "android": {
+      "package": "org.flashcards.exp"
+    }
   }
 }
