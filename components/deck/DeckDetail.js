@@ -12,7 +12,7 @@ class DeckDetail extends Component {
       title: title
     }
   }
-  render () {
+  render () {    
     const { deck, navigation } = this.props
     const { deckId } = navigation.state.params
     return (
@@ -20,8 +20,7 @@ class DeckDetail extends Component {
         <View style={{margin: 10}}>
           <Text style={[styles.textContent, {fontSize: 35}]}>{deck.title}</Text>
           <Text style={[styles.textContent, styles.textCard]}>{deck.cardCount} cards</Text>
-          <TextButton 
-            style={[styles.btn, styles.textBtn, {backgroundColor: white}]} 
+          <TextButton
             onPress={()=>navigation.navigate(
             'CreateCard',
             {deckId: deckId}
@@ -30,8 +29,7 @@ class DeckDetail extends Component {
             Add Card
           </TextButton>
           <TextButton
-            disabled={deck.cardCount === 0 ? true : false}
-            style={[styles.btn, styles.textBtn, {backgroundColor: lightBlue, color: white}]}
+            disabled={deck.cardCount === 0 ? true : false}            
             onPress={()=>navigation.navigate(
               'StartQuiz',
               {deckId: deckId})}>
@@ -58,23 +56,11 @@ class DeckDetail extends Component {
     fontSize: 25, 
     color: gray
    },
-   btn: {
-    flexDirection: 'row',
-    borderRadius: 2,
-    marginTop: 20,
-    alignItems: 'center',
-   },
-   textBtn: {
-     padding: 25,
-     textAlign: 'center',
-     color: lightBlue,
-     fontSize: 25,
-   }
  })
 /**
  * @description Specify which data from the store you passed to your component
  * @param {Object} state 
- * @param {Object} navigation 
+ * @param {Object} navigation
  */
  function mapStateToProps (state, {navigation}) {
   const { deckId } = navigation.state.params

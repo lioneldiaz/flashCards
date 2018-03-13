@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text, TouchableOpacity, Platform, FlatList } from 'react-native'
+import { 
+  View, 
+  StyleSheet, 
+  Text, 
+  TouchableOpacity, 
+  Platform, 
+  FlatList } from 'react-native'
 import { white, lightBlue } from '../../utils/Colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { getDecks } from '../../utils/Api'
@@ -24,9 +30,11 @@ class DeckList extends Component {
     const { dispatch } = this.props
     getDecks()
       .then((decks) => dispatch(receiveDecks(decks)))
-      .then(() => this.setState(() => ({ ready: true })))
+      .then(() => {
+        this.setState(() => ({ ready: true }))
+      })
   }
-  renderItem = ({ item }) => {
+  renderItem = ({ item }) => {    
     return (
       <TouchableOpacity key={item.id} onPress={() => this.props.navigation.navigate(
         'DeckDetail',
@@ -43,8 +51,8 @@ class DeckList extends Component {
     )
   }
   render () {
-    const { decks, navigation } = this.props
-    const { ready } = this.state
+    const {decks, navigation}=this.props
+    const {ready}=this.state
     if (!ready) {
       return (
         <AppLoading />
@@ -55,6 +63,7 @@ class DeckList extends Component {
         <FlatList
           data={decks}
           renderItem={this.renderItem}
+          keyExtractor={(item, index) => index}
         />
       </View>
     )

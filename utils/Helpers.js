@@ -18,16 +18,6 @@ export function formattedData (result) {
 export function generateKey () {
   return Date.now() + Math.random().toString(36).substr(-10)
 }
-
-/**
- * @description Validate that the field is only letter and space
- * @param {string} field
- * @return {bool}
- */
-export function validateLetter (field) {
-  const expressionJustLetter = /^[A-Za-z ]+$/
-  return expressionJustLetter.test(removeSpace(field))
-}
 /**
  * @description Calculate the success percentage
  * @param {numbre} correct

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import TextButton from '../button/TextButton'
 import { white, green, red, lightBlue } from '../../utils/Colors'
@@ -22,7 +22,7 @@ export default class StartQuiz extends Component {
       showAnswer: false,
       correctAnswer: 0,
       incorrectAnswer: 0,
-      showScore: false
+      showScore: false,
     }
   }
   /**
@@ -90,31 +90,31 @@ export default class StartQuiz extends Component {
   }
   render () {
     const {cards}=this.props
-    const {indexCard, arrayCards, ready, showAnswer, showScore} = this.state
+    const {indexCard, arrayCards, ready, showAnswer, showScore}=this.state
     if (!ready) {
       return (
         <AppLoading />
       )
     }
     return (
-      <View style={styles.container}>
+      <View style={{flex: 1}}>
         <Text style={styles.questionRemaining}>{`${indexCard + 1}/${arrayCards.length}`}</Text>
-        <View style={{margin: 10, flex: 1, justifyContent: 'center'}}>          
+        <View style={styles.container}>          
           {showScore && (
-            <View style={{marginTop: 20, alignItems: 'center'}}>
-              <Text style={{fontSize: 25, padding: 10}}>{percentage(this.state.correctAnswer, this.state.incorrectAnswer)} %</Text>
+            <View style={styles.viewScore}>
+              <Text style={styles.textScore}>{percentage(this.state.correctAnswer, this.state.incorrectAnswer)} %</Text>
             </View>
           )}
           {!showScore
             ? <View>
                 <View style={styles.questionAnswer}>
-                  <Text style={{fontSize: 30}}>{arrayCards[indexCard].question}</Text>
+                  <Text style={styles.question}>{arrayCards[indexCard].question}</Text>
                   {showAnswer
                     ? <View>
-                        <Text key={generateKey()} style={{fontSize: 25, color: red}} onPress={this.hidenAnswer}>Hide Answer</Text>
-                        <Text key={generateKey()}>{arrayCards[indexCard].answer}</Text>
+                        <Text style={styles.textAnswer} onPress={this.hidenAnswer}>Hide Answer</Text>
+                        <Text style={styles.answer}>{arrayCards[indexCard].answer}</Text>
                       </View>
-                    : <Text style={{fontSize: 25, color: red}} onPress={this.showAnswer}>Answer</Text>
+                    : <Text style={styles.textAnswer} onPress={this.showAnswer}>Answer</Text>
                   }
                 </View>
                 <TextButton
@@ -124,14 +124,14 @@ export default class StartQuiz extends Component {
                   Correct
                 </TextButton>
                 <TextButton 
-                  style={[styles.btn, styles.textBtn, {backgroundColor: red}]}
+                  style={{backgroundColor: red}}
                   onPress={() => this.evaluateAnswer('No')}
                 >
                   Incorrect
                 </TextButton>
               </View>
             : <TextButton 
-                style={[styles.btn, styles.textBtn, {backgroundColor: lightBlue}]}
+                style={{backgroundColor: lightBlue}}
                 onPress={this.reset}
               >
                 <MaterialCommunityIcons name="restart" size={30}/>
@@ -149,24 +149,35 @@ export default class StartQuiz extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 10,    
+    justifyContent: 'center'
   },
-  btn: {
-    borderRadius: 2,
-    marginTop: 20,
-    alignItems: 'stretch',
-   },
-   textBtn: {
-     padding: 25,
-     textAlign: 'center',
-     color: white,
-     fontSize: 25,
-   },
-   questionAnswer: {
-     marginBottom: 25,
-     alignItems: 'center'
-   },
-   questionRemaining: {
-     fontSize: 25,
-     padding: 10
-   },
+  questionAnswer: {
+    marginBottom: 25,
+    alignItems: 'center'
+  },
+  questionRemaining: {
+    fontSize: 25,
+    padding: 10
+  },
+  textAnswer: {
+    fontSize: 25, 
+    color: red
+  },
+  answer: {
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  question: {
+    fontSize: 30,
+    marginBottom: 20
+  },
+  viewScore: {
+    marginTop: 20, 
+    alignItems: 'center'
+  },
+  textScore: {
+    fontSize: 30, 
+    padding: 10
+  }
 })

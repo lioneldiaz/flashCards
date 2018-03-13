@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import TextButton from '../button/TextButton'
 import { generateKey } from '../../utils/Helpers'
 import { addCardToDeck, updateDeck } from '../../utils/Api'
 import { connect } from 'react-redux'
 import { updateCardNumber } from '../../actions/deckAction'
-import SaveButton from '../button/SaveButton'
+import TextButton from '../button/TextButton'
+import TextInputField from '../input/TextInputField'
+import { white } from '../../utils/Colors'
 
 class CreateCard extends Component {
   /** 
@@ -18,7 +19,8 @@ class CreateCard extends Component {
       id: generateKey(),
       question: '',
       answer: '',
-      deckId: props.navigation.state.params.deckId
+      deckId: props.navigation.state.params.deckId,
+      error: false
     }
   }
   /**
@@ -40,39 +42,47 @@ class CreateCard extends Component {
     const key = this.state.id
     const card = this.state
     const deckId = this.state.deckId
-    this.props.dispatch(updateCardNumber(deckId))
+    const { question, answer } = this.state
+    if (question.trim() !== '' && answer.trim() !== '') {
+      this.props.dispatch(updateCardNumber(deckId))
 
-    this.setState(() => ({
-      id: generateKey(),
-      question: '',
-      answer: ''
-    }))
+      this.setState(() => ({
+        id: generateKey(),
+        question: '',
+        answer: '',
+        error: false
+      }))
 
-    addCardToDeck({key, card})
-    updateDeck(deckId)
+      addCardToDeck({key, card})
+      updateDeck(deckId)
+    }
+    else {
+      this.setState(() => ({ error: true }))
+    }
   }
   render () {
+    const {error}=this.state
     return (
       <KeyboardAvoidingView
         behavior='padding'
         style={styles.container}
       >
         <View style={{margin: 10}}>
-          <TextInput
-            style={styles.input}
+          <TextInputField
+            error={error}
             placeholder="Question"
             value={this.state.question}
             onChangeText={this.handleQuestion}
           />
-          <TextInput
-            style={styles.input}
+          <TextInputField
+            error={error}
             placeholder="Answer"
             value={this.state.answer}
             onChangeText={this.handleAnswer}
           />
-          <SaveButton onPress={this.submit}>
+          <TextButton nameIcon={'note-add'} onPress={this.submit}>            
             Save Card
-          </SaveButton>
+          </TextButton>
         </View>
       </KeyboardAvoidingView>
     )
@@ -86,11 +96,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  input: {
-    fontSize:20, 
-    paddingBottom: 10,
-    marginTop: 15
-  }
 })
-
 export default connect()(CreateCard)

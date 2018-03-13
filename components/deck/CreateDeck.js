@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import { lightBlue, white } from '../../utils/Colors'
 import { saveDeck } from '../../utils/Api'
 import { connect } from 'react-redux'
 import { addDeck } from '../../actions/deckAction'
 import { generateKey } from '../../utils/Helpers'
-import SaveButton from '../button/SaveButton'
+import TextButton from '../button/TextButton'
+import TextInputField from '../input/TextInputField'
 
 class CreateDeck extends Component {
   /**
@@ -16,7 +16,8 @@ class CreateDeck extends Component {
     this.state = {
       id: generateKey(),
       title: '',
-      cardCount: 0
+      cardCount: 0,
+      error: false
     }
   }
   /**
@@ -34,32 +35,41 @@ class CreateDeck extends Component {
     const key = this.state.id
     const deck = this.state
 
-    this.props.dispatch(addDeck({
-      [key]: deck
-    }))
-    
-    this.setState(() => ({
-      id: generateKey(),
-      title: ''
-    }))
-    saveDeck({key, deck})
+    if (deck.title.trim() !== '') {
+      this.props.dispatch(addDeck({
+        [key]: deck
+      }))
+      
+      this.setState(() => ({
+        id: generateKey(),
+        title: '',
+        error: false
+      }))
+      saveDeck({key, deck})
+    }
+    else {
+      this.setState(() => ({ error: true }))
+    }
   }
   render () {
     const { navigation } = this.props
+    const { error } = this.state
     return (
       <KeyboardAvoidingView
         behavior='padding'
         style={styles.container}
       >
         <View style={{margin: 10}}>
-          <TextInput
-            style={styles.input}
+          <TextInputField
+            error={error}
             placeholder="Deck Title"
             maxLength={40}
             onChangeText={this.handleChange}
             value={this.state.title}
           />
-          <SaveButton onPress={this.submit}>Save Deck</SaveButton>
+          <TextButton nameIcon={'note-add'} onPress={this.submit}>
+            Save Deck
+          </TextButton>
         </View>
       </KeyboardAvoidingView>
     )
@@ -73,9 +83,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  input: {
-    fontSize:20, 
-    paddingBottom: 10
-  }  
 })
 export default connect()(CreateDeck)
