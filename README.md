@@ -21,7 +21,7 @@ git clone https://github.com/lioneldiaz/flashCards.git
     - yarn start
 ```
 ## Deployment
-The app works correctly in Emulator, and it has been tested in Android Emulator. 
+The app works correctly in Android emulator, and Android device. 
 
 ## Built With
 
