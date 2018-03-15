@@ -79,5 +79,5 @@ export const MainNavigator = StackNavigator({
         backgroundColor: lightBlue
       }
     }
-  }
+  }  
 })

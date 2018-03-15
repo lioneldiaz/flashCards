@@ -1,7 +1,7 @@
-import { ADD_DECK, RECEIVE_DECKS, UPDATE_CARD_NUMBER } from '../actions/deckAction'
+import { ADD_DECK, RECEIVE_DECKS, UPDATE_CARD_NUMBER, REMOVE_DECK } from '../actions/deckAction'
 
 export function decks (state = {}, action) {
-  const { type, decks, deck, card, deckId } = action
+  const { type, decks, deck, card, deckId, key } = action
   switch (type) {
     case ADD_DECK :
       return {
@@ -12,9 +12,16 @@ export function decks (state = {}, action) {
         ...state, ...decks
       }
     case UPDATE_CARD_NUMBER :
-      state[deckId].cardCount ++
+      let deck = state[deckId]
+      deck.cardCount ++
       return {
-        ...state
+        ...state, [deckId]:deck
+      }
+    case REMOVE_DECK :
+      let updateDecks = state
+      delete updateDecks[key]
+      return {
+        ...state, ...updateDecks
       }
     default : return state
   }

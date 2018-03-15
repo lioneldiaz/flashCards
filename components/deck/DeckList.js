@@ -7,7 +7,7 @@ import {
   Platform, 
   FlatList } from 'react-native'
 import { white, lightBlue } from '../../utils/Colors'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import { getDecks } from '../../utils/Api'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../../actions/deckAction'
@@ -34,6 +34,9 @@ class DeckList extends Component {
         this.setState(() => ({ ready: true }))
       })
   }
+  /**
+   * @description Render each item in the list
+   */
   renderItem = ({ item }) => {    
     return (
       <TouchableOpacity key={item.id} onPress={() => this.props.navigation.navigate(
@@ -44,10 +47,21 @@ class DeckList extends Component {
           <Text style={[styles.textCard, {marginLeft: 40}]}>{item.title}</Text>
           <View style={{flexDirection: 'row'}}>
             <MaterialCommunityIcons style={{color: white}} name="cards" size={30}/>
-            <Text style={styles.textCard}>{item.cardCount} Card</Text>
+            <Text style={styles.textCard}>{item.cardCount} Card</Text>            
           </View>
         </View>
       </TouchableOpacity>
+    )
+  }
+  /**
+   * @description Render if the list is empty
+   */
+  renderEmpty = () => {
+    return (
+      <View style={[styles.card, {flexDirection: 'row'}]}>
+        <Ionicons style={{color: white}} name="md-information-circle" size={30}/>
+        <Text style={styles.textCard}>There is no deck available</Text>         
+      </View>
     )
   }
   render () {
@@ -63,6 +77,7 @@ class DeckList extends Component {
         <FlatList
           data={decks}
           renderItem={this.renderItem}
+          ListEmptyComponent={this.renderEmpty}
           keyExtractor={(item, index) => index}
         />
       </View>

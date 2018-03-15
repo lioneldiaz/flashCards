@@ -9,7 +9,6 @@ export function getDecks () {
   return AsyncStorage.getItem(DECK_STORAGE_KEY)
     .then(formattedData)
 }
-
 /**
  * @description Add new Deck
  * @param {string} key
@@ -49,9 +48,27 @@ export function updateDeck (deckId) {
       AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(data))
     })
 }
+/**
+ * @description Remove specific deck
+ * @param {string} key 
+ */
+export function deleteDeck (key) {
+  return getDecks()
+    .then(decks => {
+      decks[key] = undefined
+      delete decks[key]
+      AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(decks))
+    })
+}
 /** 
  * @description Remove all Decks
 */
-export function removeDeck () {
+export function removeDecks () {
   return AsyncStorage.removeItem(DECK_STORAGE_KEY)
+}
+/** 
+ * @description Remove all Cards
+*/
+export function removeCard () {
+  return AsyncStorage.removeItem(CARD_STORAGE_KEY)
 }

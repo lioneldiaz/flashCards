@@ -29,12 +29,19 @@ class CreateDeck extends Component {
     }))
   }
   /**
+   * @description Route to DeckDetail
+   */
+  toDeckDetail = (id, title) => {
+    this.props.navigation.navigate('DeckDetail', {deckId: id, title: title})
+  }
+  /**
    * @description Save a new Deck
    */
   submit = () => {
     const key = this.state.id
     const deck = this.state
-
+    delete deck.error
+    
     if (deck.title.trim() !== '') {
       this.props.dispatch(addDeck({
         [key]: deck
@@ -46,6 +53,7 @@ class CreateDeck extends Component {
         error: false
       }))
       saveDeck({key, deck})
+        .then(() => this.toDeckDetail(deck.id, deck.title))
     }
     else {
       this.setState(() => ({ error: true }))
