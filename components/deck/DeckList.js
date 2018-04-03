@@ -20,7 +20,7 @@ class DeckList extends Component {
   constructor () {
     super ()
     this.state = {
-      ready: false
+      isReady: false
     }
   }
   /**
@@ -31,7 +31,7 @@ class DeckList extends Component {
     getDecks()
       .then((decks) => dispatch(receiveDecks(decks)))
       .then(() => {
-        this.setState(() => ({ ready: true }))
+        this.setState(() => ({ isReady: true }))
       })
   }
   /**
@@ -66,8 +66,8 @@ class DeckList extends Component {
   }
   render () {
     const {decks, navigation}=this.props
-    const {ready}=this.state
-    if (!ready) {
+    const {isReady}=this.state
+    if (!isReady) {
       return (
         <AppLoading />
       )
